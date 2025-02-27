@@ -125,15 +125,23 @@ SELECT
 	NULL AS 'Furnishings are included in the reported calculations', -- AO
 	NULL AS 'Carbon modeling scopes', -- AP
 	NULL AS 'Carbon modeling LCA stages', -- AQ
-	CTE_Design_Energy.[Onsite renewables],
-	CTE_Design_Energy.[Window/Wall ratio],
-	CTE_Design_Energy.[Grid electricity],
-	CTE_Design_Energy.[Gas],
-	CTE_Design_Energy.[District],
-	CTE_Design_Energy.[Electricity from on-site renewables],
-	CTE_Design_Energy.[Electricity from dedicated off-site renewables],
-	CTE_Design_Resources.[Has biogenic carbon],
-	CTE_Design_Resources.[Biogenic_Carbon_Narrative]
+	CTE_Design_Resources.[Has biogenic carbon], -- AR
+	CTE_Design_Resources.[Biogenic_Carbon_Narrative], -- AS
+	CTE_Design_Energy.[Onsite renewables], -- AT
+	NULL AS 'Do off-site renewables provide addtionality', -- AU
+	NULL AS 'Are off-site renewables located in the same energy grid', -- AV
+	NULL AS 'Off-site renewable energy type', -- AW
+	NULL AS 'OFF-site renewables purchase time', -- AX
+	CTE_Design_Energy.[Window/Wall ratio], -- AY
+	NULL AS 'ASHRAE baseline', -- AZ (what formula?)
+	CTE_Design_Energy.[Grid electricity], -- BA
+	CTE_Design_Energy.[Gas], -- BB
+	CTE_Design_Energy.[District], -- BC
+	NULL AS 'Other fossiil fuel sources', -- BD
+	CTE_Design_Energy.[Electricity from on-site renewables], -- BE
+	NULL AS 'Electricity purchased off-site renewables', --BF
+	CTE_Design_Energy.[Electricity from dedicated off-site renewables], -- BG
+	NULL AS 'Place Holders' -- BH
 
 FROM 
 	CTE_ProjectData
