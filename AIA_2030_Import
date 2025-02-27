@@ -46,10 +46,41 @@ CTE_Design_Energy AS (
 		Design_Energy.[Lighting_Power_Density_Installed] AS 'Predicted LPD',
 		Design_Energy.[Energy_Renewable_Strategy] AS 'Onsite renewables',
 		Design_Energy.[WWR_Aggregate] AS 'Window/Wall ratio',
-		Design_Energy.[Fuel_Grid_Predicted] AS 'Grid electricity', -- Need to convert units
-		Design_Energy.[Fuel_NatGas_Predicted] AS 'Gas', -- Need to convert units
-		Design_Energy.[Fuel_District_Steam_Predicted] AS 'District', -- Need to convert units
-		-- Other fossil fuel sources,
+		CASE
+			WHEN Design_Energy.[Fuel_Grid_Predicted_Units] = 'kWh' THEN Design_Energy.[Fuel_Grid_Predicted]
+			WHEN Design_Energy.[Fuel_Grid_Predicted_Units] = 'MWh' THEN ( Design_Energy.[Fuel_Grid_Predicted] / 1000 )
+			WHEN Design_Energy.[Fuel_Grid_Predicted_Units] = 'kBtu' THEN ( Design_Energy.[Fuel_Grid_Predicted] / 3.412 )
+			WHEN Design_Energy.[Fuel_Grid_Predicted_Units] = 'Mbtu' THEN ( Design_Energy.[Fuel_Grid_Predicted] / 3412 )
+			ELSE 'Units Not Found'
+		END AS 'Grid electricity',
+		CASE
+			WHEN Design_Energy.[Fuel_NatGas_Predicted_Units] = 'Therms' THEN Design_Energy.[Fuel_NatGas_Predicted]
+			WHEN Design_Energy.[Fuel_NatGas_Predicted_Units] = 'kBtu' THEN ( Design_Energy.[Fuel_NatGas_Predicted] / 100 )
+			WHEN Design_Energy.[Fuel_NatGas_Predicted_Units] = 'Mbtu' THEN ( Design_Energy.[Fuel_NatGas_Predicted] / 100000 )
+			WHEN Design_Energy.[Fuel_NatGas_Predicted_Units] = 'cf' THEN ( Design_Energy.[Fuel_NatGas_Predicted] / 96.339 )
+			WHEN Design_Energy.[Fuel_NatGas_Predicted_Units] = 'ccf' THEN ( Design_Energy.[Fuel_NatGas_Predicted] / .96339 )
+			WHEN Design_Energy.[Fuel_NatGas_Predicted_Units] = 'kcf' THEN ( Design_Energy.[Fuel_NatGas_Predicted] / 9.6339 )
+			WHEN Design_Energy.[Fuel_NatGas_Predicted_Units] = 'Cubic Meters' THEN ( Design_Energy.[Fuel_NatGas_Predicted] / 2.83 )
+			ELSE 'Units Not Found'
+		END AS 'Gas',
+		( CASE
+            WHEN Design_Energy.[Fuel_District_Steam_Predicted_Units] = 'kBtu' THEN Design_Energy.[Fuel_District_Steam_Predicted]
+            WHEN Design_Energy.[Fuel_District_Steam_Predicted_Units] = 'MBtu' THEN (Design_Energy.[Fuel_District_Steam_Predicted] * 1000)
+            WHEN Design_Energy.[Fuel_District_Steam_Predicted_Units] = 'GJ' THEN (Design_Energy.[Fuel_District_Steam_Predicted] * 947.817)
+            WHEN Design_Energy.[Fuel_District_Steam_Predicted_Units] = 'Lbs' THEN (Design_Energy.[Fuel_District_Steam_Predicted] * 1.194)
+            WHEN Design_Energy.[Fuel_District_Steam_Predicted_Units] = 'kLbs' THEN (Design_Energy.[Fuel_District_Steam_Predicted] * 1194)
+            WHEN Design_Energy.[Fuel_District_Steam_Predicted_Units] = 'MLbs' THEN (Design_Energy.[Fuel_District_Steam_Predicted] * 1194000)
+            WHEN Design_Energy.[Fuel_District_Steam_Predicted_Units] = 'Therms' THEN (Design_Energy.[Fuel_District_Steam_Predicted] * 100)
+            WHEN Design_Energy.[Fuel_District_Steam_Predicted_Units] = 'kg' THEN (Design_Energy.[Fuel_District_Steam_Predicted] * 2.632)
+            ELSE 0
+        END ) +
+		( CASE
+            WHEN Design_Energy.[Fuel_District_ChillWater_Predicted_Units] = 'kBtu' THEN Design_Energy.[Fuel_District_ChillWater_Predicted]
+            WHEN Design_Energy.[Fuel_District_ChillWater_Predicted_Units] = 'MBtu' THEN (Design_Energy.[Fuel_District_ChillWater_Predicted] * 1000)
+            WHEN Design_Energy.[Fuel_District_ChillWater_Predicted_Units] = 'Ton Hours' THEN (Design_Energy.[Fuel_District_ChillWater_Predicted] * 12)
+            WHEN Design_Energy.[Fuel_District_ChillWater_Predicted_Units] = 'GJ' THEN (Design_Energy.[Fuel_District_ChillWater_Predicted] * 947.817)
+            ELSE 0
+        END ) AS 'District',
 		Design_Energy.[Fuel_OnSite_Renewables_Predicted] AS 'Electricity from on-site renewables', -- Need to convert units
 		-- Electricity from purchased off-site renewables
 		Design_Energy.[Fuel_OffSite_Renewables_Predicted] AS 'Electricity from dedicated off-site renewables'
@@ -137,7 +168,7 @@ SELECT
 	CTE_Design_Energy.[Grid electricity], -- BA
 	CTE_Design_Energy.[Gas], -- BB
 	CTE_Design_Energy.[District], -- BC
-	NULL AS 'Other fossiil fuel sources', -- BD
+	NULL AS 'Other fossil fuel sources', -- BD
 	CTE_Design_Energy.[Electricity from on-site renewables], -- BE
 	NULL AS 'Electricity purchased off-site renewables', --BF
 	CTE_Design_Energy.[Electricity from dedicated off-site renewables], -- BG
