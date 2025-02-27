@@ -32,23 +32,37 @@ CTE_Design_Energy AS (
 		Energy_Code AS 'Energy code',
 		Energy_Use_Intensity_Target_2030 AS 'Energy target',
 		EUI_Gross_Predicted AS 'Gross pEUI',
-		EUI_Net_Predicted_Calculated,
-		Lighting_Power_Density_Installed,
-		Energy_Renewable_Strategy,
-		WWR_Aggregate,
-		Fuel_Grid_Predicted, -- Need to convert units
-		Fuel_NatGas_Predicted, -- Need to convert units
-		Fuel_District_Steam_Predicted, -- Need to convert units
-		--Other fossile fuel sources,
-		Fuel_OnSite_Renewables_Predicted, -- Need to convert units
-		-- Electricity from purchase off-site renewables
-		Fuel_OffSite_Renewables_Predicted
-
+		EUI_Net_Predicted_Calculated 'Net pEUI',
+		Lighting_Power_Density_Installed AS 'Predicted LPD',
+		Energy_Renewable_Strategy AS 'Onsite renewables',
+		WWR_Aggregate AS 'Window/Wall ratio',
+		Fuel_Grid_Predicted AS 'Grid electricity', -- Need to convert units
+		Fuel_NatGas_Predicted AS 'Gas', -- Need to convert units
+		Fuel_District_Steam_Predicted AS 'District', -- Need to convert units
+		-- Other fossil fuel sources,
+		Fuel_OnSite_Renewables_Predicted AS 'Elecrticity from on-site renewables', -- Need to convert units
+		-- Electricity from purchased off-site renewables
+		Fuel_OffSite_Renewables_Predicted AS 'Electricity from dedicated off-site renewables'
 
 	FROM Design_Energy
+),
+
+CTE_Design_Resources AS (
+	SELECT
+		ROW_NUMBER() OVER (PARTITION BY [CompositeKey] ORDER BY [Logged_Date] DESC) AS RowNum,
+		CompositeKey,
+		Embodied_Carbon_Intensity_Predicted_Metric AS 'Predicted embodied carbon',
+		YEAR( Logged_Date ) AS 'Embodied carbon modeling year',
+		CASE
+			WHEN Biogenic_Carbon_Included_YN = 'Y' THEN 'Yes'
+			WHEN Biogenic_Carbon_Included_YN = 'N' THEN 'No'
+		END AS 'Has biogenic carbon',
+		Biogenic_Carbon_Narrative
+		
+	FROM Design_Resources
 )
 
 SELECT * 
 
-FROM CTE_Design_Energy
+FROM CTE_Design_Resources
 
