@@ -1,0 +1,54 @@
+-- ALTER VIEW vw_AIA_2030_Import AS
+
+WITH CTE_ProjectData AS (
+	SELECT
+		ROW_NUMBER() OVER (PARTITION BY [CompositeKey] ORDER BY [Logged_Date] DESC) AS RowNum,
+		CompositeKey,
+		Project_Name AS 'Project name',
+		Project_Number AS 'Project number',
+		Project_Construction_Type AS 'Construction type',
+		Project_SMRT_Office AS 'Office location',
+		Project_Country AS 'Country',
+		Project_State AS 'State',
+		Project_City AS 'City',
+		Project_Zip_Code AS 'Postal code',
+		Project_Climate_Zone AS 'Climate zone',
+		Project_Use_Primary AS 'Use type 1',
+		( Project_Use_Primary_Perc * Area_Building ) AS 'Use type area 1',
+		Project_Use_Secondary AS 'Use type 2',
+		( Project_Use_Secondary_Perc * Area_Building ) AS 'Use type area 2',
+		Project_Substantial_Completion_Year AS 'Estimated occupancy year',
+		EUI_Benchmark AS 'Energy baseline',
+		Energy_Use_Intensity_Source AS 'Energy baseline source',
+		Project_Phase AS 'Reporting phase'
+	
+	FROM ProjectData
+),
+
+CTE_Design_Energy AS (
+	SELECT
+		ROW_NUMBER() OVER (PARTITION BY [CompositeKey] ORDER BY [Logged_Date] DESC) AS RowNum,
+		CompositeKey,
+		Energy_Code AS 'Energy code',
+		Energy_Use_Intensity_Target_2030 AS 'Energy target',
+		EUI_Gross_Predicted AS 'Gross pEUI',
+		EUI_Net_Predicted_Calculated,
+		Lighting_Power_Density_Installed,
+		Energy_Renewable_Strategy,
+		WWR_Aggregate,
+		Fuel_Grid_Predicted, -- Need to convert units
+		Fuel_NatGas_Predicted, -- Need to convert units
+		Fuel_District_Steam_Predicted, -- Need to convert units
+		--Other fossile fuel sources,
+		Fuel_OnSite_Renewables_Predicted, -- Need to convert units
+		-- Electricity from purchase off-site renewables
+		Fuel_OffSite_Renewables_Predicted
+
+
+	FROM Design_Energy
+)
+
+SELECT * 
+
+FROM CTE_Design_Energy
+
