@@ -82,28 +82,37 @@ CTE_Design_Resources AS (
 -- combining the relevant columns for the ad-hoc view.
 ---------------------------------------------------------------------------------------------------
 SELECT 
-	CTE_ProjectData.[Project name],
-	CTE_ProjectData.[Project number],
-	CTE_ProjectData.[Construction type],
-	CTE_ProjectData.[Office location],
-	CTE_ProjectData.[Country],
-	CTE_ProjectData.[State],
-	CTE_ProjectData.[City],
-	CTE_ProjectData.[Postal code],
-	CTE_ProjectData.[Climate zone],
-	CTE_ProjectData.[Use type 1],
-	CTE_ProjectData.[Use type area 1],
-	CTE_ProjectData.[Use type 2],
-	CTE_ProjectData.[Use type area 2],
-	CTE_ProjectData.[Estimated occupancy year],
-	CTE_ProjectData.[Energy baseline],
-	CTE_ProjectData.[Energy baseline source],
-	CTE_ProjectData.[Reporting phase],
-	CTE_Design_Energy.[Energy code],
-	CTE_Design_Energy.[Energy target],
-	CTE_Design_Energy.[Gross pEUI],
-	CTE_Design_Energy.[Net pEUI],
-	CTE_Design_Energy.[Predicted LPD],
+	CTE_ProjectData.[Project name], -- A
+	CTE_ProjectData.[Project number], -- B
+	NULL AS 'Project status', -- C
+	NULL AS 'Project type', -- D
+	CTE_ProjectData.[Construction type], -- E
+	CTE_ProjectData.[Office location], -- F
+	CTE_ProjectData.[Country], -- G
+	CTE_ProjectData.[State], -- H
+	CTE_ProjectData.[City], -- I
+	CTE_ProjectData.[Postal code], -- J
+	CTE_ProjectData.[Climate zone], -- K
+	CTE_ProjectData.[Use type 1], -- L
+	CTE_ProjectData.[Use type area 1], -- M
+	CTE_ProjectData.[Use type 2], -- N
+	CTE_ProjectData.[Use type area 2], -- O
+	NULL AS 'Unit', -- P
+	CTE_ProjectData.[Estimated occupancy year], -- Q
+	CTE_Design_Energy.[Energy code], -- R
+	CTE_ProjectData.[Energy baseline], -- S
+	CTE_ProjectData.[Energy baseline source], -- T
+	CTE_Design_Energy.[Energy target], -- U
+	CTE_ProjectData.[Reporting phase], -- V
+	NULL AS 'Reporting year', -- W
+	CTE_Design_Energy.[Gross pEUI], -- X
+	CTE_Design_Energy.[Net pEUI], -- Y
+	CTE_Design_Energy.[Predicted LPD],-- Z
+	NULL AS 'Energy modeling tool', -- AA
+	NULL AS 'Other modeling tool name', -- AB
+	NULL AS 'Energy modeling party', -- AC
+	NULL AS 'Energy modeled date', -- AD
+	Null AS 'Energy modeling cost', -- AE
 	CTE_Design_Energy.[Onsite renewables],
 	CTE_Design_Energy.[Window/Wall ratio],
 	CTE_Design_Energy.[Grid electricity],
