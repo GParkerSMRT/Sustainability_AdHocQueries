@@ -110,8 +110,8 @@ CTE_Design_Resources AS (
 		Design_Resources.[Embodied_Carbon_Intensity_Predicted_Metric] AS 'Predicted embodied carbon',
 		YEAR( Design_Resources.[Logged_Date] ) AS 'Embodied carbon modeling year',
 		CASE
-			WHEN Design_Resources.[Biogenic_Carbon_Included_YN] = 'Y' THEN 'Yes'
-			WHEN Design_Resources.[Biogenic_Carbon_Included_YN] = 'N' THEN 'No'
+			WHEN Design_Resources.[Biogenic_Carbon_Included_YN] = 'Y' THEN 'yes'
+			WHEN Design_Resources.[Biogenic_Carbon_Included_YN] = 'N' THEN 'no'
 		END AS 'Has biogenic carbon',
 		Design_Resources.[Biogenic_Carbon_Narrative]
 	FROM 
@@ -138,7 +138,7 @@ SELECT
 	CTE_ProjectData.[Use type area 1], -- M
 	CTE_ProjectData.[Use type 2], -- N
 	CTE_ProjectData.[Use type area 2], -- O
-	NULL AS 'Unit', -- P
+	'IP' AS 'Unit', -- P
 	CTE_ProjectData.[Estimated occupancy year], -- Q
 	CTE_Design_Energy.[Energy code], -- R
 	CTE_ProjectData.[Energy baseline], -- S
