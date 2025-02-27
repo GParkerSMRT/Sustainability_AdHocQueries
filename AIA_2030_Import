@@ -48,7 +48,7 @@ CTE_Design_Energy AS (
 		Design_Energy.[WWR_Aggregate] AS 'Window/Wall ratio',
 		CASE
 			WHEN Design_Energy.[Fuel_Grid_Predicted_Units] = 'kWh' THEN Design_Energy.[Fuel_Grid_Predicted]
-			WHEN Design_Energy.[Fuel_Grid_Predicted_Units] = 'MWh' THEN ( Design_Energy.[Fuel_Grid_Predicted] / 1000 )
+			WHEN Design_Energy.[Fuel_Grid_Predicted_Units] = 'MWh' THEN ( Design_Energy.[Fuel_Grid_Predicted] * 1000 )
 			WHEN Design_Energy.[Fuel_Grid_Predicted_Units] = 'kBtu' THEN ( Design_Energy.[Fuel_Grid_Predicted] / 3.412 )
 			WHEN Design_Energy.[Fuel_Grid_Predicted_Units] = 'Mbtu' THEN ( Design_Energy.[Fuel_Grid_Predicted] / 3412 )
 			ELSE 'Units Not Found'
@@ -81,9 +81,19 @@ CTE_Design_Energy AS (
             WHEN Design_Energy.[Fuel_District_ChillWater_Predicted_Units] = 'GJ' THEN (Design_Energy.[Fuel_District_ChillWater_Predicted] * 947.817)
             ELSE 0
         END ) AS 'District',
-		Design_Energy.[Fuel_OnSite_Renewables_Predicted] AS 'Electricity from on-site renewables', -- Need to convert units
-		-- Electricity from purchased off-site renewables
-		Design_Energy.[Fuel_OffSite_Renewables_Predicted] AS 'Electricity from dedicated off-site renewables'
+		CASE
+			WHEN Design_Energy.[Fuel_OnSite_Renew_Predicted_Units] = 'kWh' THEN Design_Energy.[Fuel_OnSite_Renewables_Predicted]
+			WHEN Design_Energy.[Fuel_OnSite_Renew_Predicted_Units] = 'MWh' THEN ( Design_Energy.[Fuel_OnSite_Renewables_Predicted] * 1000 )
+			WHEN Design_Energy.[Fuel_OnSite_Renew_Predicted_Units] = 'GJ' THEN ( Design_Energy.[Fuel_OnSite_Renewables_Predicted] * 277.778 )
+			ELSE 'Units Not Found'
+		END AS 'Electricity from on-site renewables',
+		CASE
+			WHEN Design_Energy.[Fuel_OffSite_Renew_Predicted_Units] = 'kWh' THEN Design_Energy.[Fuel_OffSite_Renewables_Predicted]
+			WHEN Design_Energy.[Fuel_OffSite_Renew_Predicted_Units] = 'MWh' THEN ( Design_Energy.[Fuel_OffSite_Renewables_Predicted] * 1000 )
+			WHEN Design_Energy.[Fuel_OffSite_Renew_Predicted_Units] = 'GJ' THEN ( Design_Energy.[Fuel_OffSite_Renewables_Predicted] * 277.778 )
+			ELSE 'Units Not Found'
+		END AS 'Electricity from dedicated off-site renewables'
+
 	FROM 
 		Design_Energy
 ),
