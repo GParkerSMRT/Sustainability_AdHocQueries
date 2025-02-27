@@ -112,7 +112,19 @@ SELECT
 	NULL AS 'Other modeling tool name', -- AB
 	NULL AS 'Energy modeling party', -- AC
 	NULL AS 'Energy modeled date', -- AD
-	Null AS 'Energy modeling cost', -- AE
+	NULL AS 'Energy modeling cost', -- AE
+	CTE_Design_Resources.[Predicted embodied carbon], -- AF
+	CTE_Design_Resources.[Embodied carbon modeling year], -- AG
+	NULL AS 'Carbon modeling tool', -- AH
+	NULL AS 'Other carbon modeling tool name', -- AI
+	NULL AS 'Carbon modeling tool version', -- AJ
+	NULL AS 'Carbon modeling time', -- AK
+	NULL AS 'Building Construction Type', -- AL
+	CTE_ProjectData.[Reporting phase] AS 'Phase of project', -- AM
+	NULL AS 'Equipment is included in the reported calculations', -- AN
+	NULL AS 'Furnishings are included in the reported calculations', -- AO
+	NULL AS 'Carbon modeling scopes', -- AP
+	NULL AS 'Carbon modeling LCA stages', -- AQ
 	CTE_Design_Energy.[Onsite renewables],
 	CTE_Design_Energy.[Window/Wall ratio],
 	CTE_Design_Energy.[Grid electricity],
@@ -120,8 +132,6 @@ SELECT
 	CTE_Design_Energy.[District],
 	CTE_Design_Energy.[Electricity from on-site renewables],
 	CTE_Design_Energy.[Electricity from dedicated off-site renewables],
-	CTE_Design_Resources.[Predicted embodied carbon],
-	CTE_Design_Resources.[Embodied carbon modeling year],
 	CTE_Design_Resources.[Has biogenic carbon],
 	CTE_Design_Resources.[Biogenic_Carbon_Narrative]
 
